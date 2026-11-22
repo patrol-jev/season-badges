@@ -1,0 +1,8 @@
+# 내 컴퓨터에만 둘 것
+.env*
+*.bak
+.claude/
+scratch-*
+node_modules/
+.DS_Store
+Thumbs.db
