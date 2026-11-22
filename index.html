@@ -52,7 +52,6 @@
   .howto .n { flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--ink); color: var(--paper); font-size: 13px; font-weight: 500; display: inline-flex; align-items: center; justify-content: center; margin-top: 1px; transition: background-color .9s, color .9s; }
   .dragzone { display: flex; align-items: center; gap: 12px; margin: 12px 0 6px; }
   .bm { display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 12px 0 10px; border-radius: 7px; background: #fff; color: #202124; border: 1px solid #dadce0; box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 0 0 4px color-mix(in srgb, var(--accent) 35%, transparent); text-decoration: none; font-size: 13px; font-family: system-ui, "Malgun Gothic", sans-serif; cursor: grab; user-select: none; }
-  .bm svg path { stroke-width: 1.6; stroke-linecap: round; fill: none; }
   .bm:active { cursor: grabbing; }
   .up { font-size: 13px; color: var(--dim); animation: sb-up 1.4s ease-in-out infinite; }
   @keyframes sb-up { 50% { transform: translateY(-6px); opacity: .55; } }
@@ -92,11 +91,11 @@
     <li><span class="n">1</span><div>키보드에서 <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd> 를 누르세요. <span class="muted">(맥은 <kbd>⌘</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd>)</span><br><span class="muted">주소창 바로 아래에 북마크바(가는 줄)가 생겨요.</span></div></li>
     <li><span class="n">2</span><div>아래 단추를 잡고, 위쪽 북마크바로 <b>끌어 올리세요.</b>
       <div class="dragzone">
-        <a class="bm" id="bm" href="#" draggable="true"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M8 1.5v13" stroke="#f2a7c3"/><path d="M1.5 8h13" stroke="#f4c542"/><path d="M3.4 3.4l9.2 9.2" stroke="#dc6f2f"/><path d="M12.6 3.4l-9.2 9.2" stroke="#86b7e6"/></svg>4계절 배지</a>
+        <a class="bm" id="bm" href="#" draggable="true">❄️ 4계절 배지</a>
         <span class="up" aria-hidden="true">↑ 북마크바로</span>
       </div>
       <span class="muted" id="bmhint" role="status"></span></div></li>
-    <li><span class="n">3</span><div>네이버 · 구글 등 아무 사이트로 가서, 북마크바에 생긴 <b>「4계절 배지」</b> 를 누르세요.</div></li>
+    <li><span class="n">3</span><div>네이버 · 구글 등 아무 사이트로 가서, 북마크바에 생긴 <b>「❄️ 4계절 배지」</b> 를 누르세요.</div></li>
     <li><span class="n">4</span><div>화면 위 가운데에 뜬 배지에서 <b>계절을 고르세요.</b><br><span class="muted">왼쪽 손잡이(⠿)를 잡고 끌면 자리를 옮기고, × 로 닫아요. 새로 고치면 사라져요.</span></div></li>
   </ol>
   <p class="muted">그 페이지에 잠깐 얹을 뿐 사이트를 바꾸지 않아요. 컴퓨터 브라우저(크롬 · 엣지 · 웨일)에서 됩니다.</p>
