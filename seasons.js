@@ -3,7 +3,7 @@
   - 누르면 그 계절 날씨로 바뀝니다. 겨울은 눈이 내리고 쌓이고, 봄은 나무가 자라 꽃이 피고, 여름은 햇볕과 풀, 가을은 낙엽.
   - 이 파일 하나가 전부입니다. 라이브러리도, 빌드도, 서버도 없습니다.
   - 붙이는 법: 페이지 맨 아래에 <script src="seasons.js" defer></script> 한 줄.
-      배지를 놓을 자리가 있으면 그 자리에 <span data-season-badges></span>. 없으면 화면 왼쪽 아래에 떠 있습니다.
+      배지를 놓을 자리가 있으면 그 자리에 <span data-season-badges></span>. 없으면 화면 위 가운데에 떠 있고, 손잡이로 끌어 옮깁니다.
   - 내 페이지 색까지 바꾸고 싶으면 CSS 에서 html[data-season="winter"] { … } 처럼 고르면 됩니다.
       그때는 덧칠(전체를 살짝 물들이는 막)을 끄세요: <span data-season-badges data-tint="off"></span>
   - 남의 페이지(구글 등)에는 북마클릿으로 씁니다. 만드는 법은 README.md.
@@ -50,7 +50,8 @@
 
   // ---------- 배지 ----------
 
-  const host = slot || el("div", "position:fixed;left:14px;bottom:14px;z-index:2147483646;", document.body);
+  // 떠 있을 때는 화면 위 가운데(북마크바 바로 아래, 눈이 가는 곳). 손잡이로 끌어 옮긴다.
+  const host = slot || el("div", "position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:2147483646;", document.body);
   host.setAttribute("title", "season-badges · patrol_jev");
   // 배지가 붙었다는 표시. 페이지 CSS 가 [data-ready] 로 자리를 잡는다.
   host.setAttribute("data-ready", "");
@@ -66,6 +67,12 @@
     button:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
     button[aria-pressed="true"] { background: var(--c); border-color: var(--c); color: #1d2420; }
     svg { width: 14px; height: 14px; flex: none; }
+    .float { animation: sb-drop .55s cubic-bezier(.2,.9,.3,1.25) both; }
+    @keyframes sb-drop { from { transform: translateY(-28px) scale(.92); opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .float { animation: none; } }
+    .grip { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 30px; cursor: grab; touch-action: none; opacity: .45; border-radius: 999px; }
+    .grip:hover { opacity: .8; }
+    .grip:active { cursor: grabbing; }
     .x { padding: 0; width: 26px; justify-content: center; border-color: transparent; opacity: .55; }
     /* 자리가 좁으면 <span data-season-badges data-compact> 로 그림만 */
     :host([data-compact]) button { padding: 0; width: 28px; justify-content: center; }
@@ -95,6 +102,35 @@
     }
     return s;
   };
+
+  // 손잡이(떠 있을 때만). 잡고 끌면 배지 줄이 따라온다. 판의 빈 곳을 잡아도 된다.
+  if (floating) {
+    const grip = el("div", "", row);
+    grip.className = "grip";
+    grip.title = lang === "ko" ? "끌어서 옮기기" : "Drag to move";
+    const g = svg("svg", { viewBox: "0 0 10 16", fill: "currentColor", "aria-hidden": "true", style: "width:10px;height:16px" }, grip);
+    for (const [cx, cy] of [[3, 3], [7, 3], [3, 8], [7, 8], [3, 13], [7, 13]]) svg("circle", { cx, cy, r: "1.3" }, g);
+    let drag = null;
+    const down = (e) => {
+      if (e.target !== row && !grip.contains(e.target)) return;
+      const box = host.getBoundingClientRect();
+      drag = { dx: e.clientX - box.left, dy: e.clientY - box.top, id: e.pointerId };
+      host.style.transform = "none"; host.style.left = box.left + "px"; host.style.top = box.top + "px";
+      row.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    };
+    const move = (e) => {
+      if (!drag || e.pointerId !== drag.id) return;
+      const box = host.getBoundingClientRect();
+      host.style.left = clamp(e.clientX - drag.dx, 4, window.innerWidth - box.width - 4) + "px";
+      host.style.top = clamp(e.clientY - drag.dy, 4, window.innerHeight - box.height - 4) + "px";
+    };
+    const up = () => { drag = null; };
+    row.addEventListener("pointerdown", down);
+    row.addEventListener("pointermove", move);
+    row.addEventListener("pointerup", up);
+    row.addEventListener("pointercancel", up);
+  }
 
   const buttons = {};
   for (const season of SEASONS) {
@@ -428,7 +464,8 @@
     born = performance.now();
     if (still && scene) { born -= 99000; }
     run();
-    try { if (season) localStorage.setItem(KEY, season); else localStorage.removeItem(KEY); } catch (e) { /* 그대로 */ }
+    // 기억은 내 페이지(자리에 붙은 경우)에서만. 남의 페이지 저장소에는 아무것도 적지 않는다.
+    if (!floating) { try { if (season) localStorage.setItem(KEY, season); else localStorage.removeItem(KEY); } catch (e) { /* 그대로 */ } }
     try { window.dispatchEvent(new CustomEvent("season-change", { detail: { season } })); } catch (e) { /* 그대로 */ }
   }
 

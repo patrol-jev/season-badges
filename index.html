@@ -46,8 +46,23 @@
   p { max-width: 40em; }
   pre { background: var(--card); border: 1px solid var(--hair); border-radius: 14px; padding: 16px 18px; overflow-x: auto; font-size: 13.5px; line-height: 1.6; transition: background-color .9s; }
   code { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; }
-  .bm { display: inline-flex; align-items: center; gap: 8px; margin: 8px 0; padding: 10px 18px; border-radius: 999px; background: var(--ink); color: var(--paper); text-decoration: none; font-size: 14px; cursor: grab; transition: background-color .9s, color .9s; }
+  /* 북마크 꼴 단추: 북마크바에 놓였을 때와 같은 모양 */
+  .howto { list-style: none; padding: 0; margin: 18px 0 8px; max-width: 44em; }
+  .howto li { display: flex; gap: 14px; margin: 0 0 18px; }
+  .howto .n { flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--ink); color: var(--paper); font-size: 13px; font-weight: 500; display: inline-flex; align-items: center; justify-content: center; margin-top: 1px; transition: background-color .9s, color .9s; }
+  .dragzone { display: flex; align-items: center; gap: 12px; margin: 12px 0 6px; }
+  .bm { display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 12px 0 10px; border-radius: 7px; background: #fff; color: #202124; border: 1px solid #dadce0; box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 0 0 4px color-mix(in srgb, var(--accent) 35%, transparent); text-decoration: none; font-size: 13px; font-family: system-ui, "Malgun Gothic", sans-serif; cursor: grab; user-select: none; }
+  .bm svg path { stroke-width: 1.6; stroke-linecap: round; fill: none; }
+  .bm:active { cursor: grabbing; }
+  .up { font-size: 13px; color: var(--dim); animation: sb-up 1.4s ease-in-out infinite; }
+  @keyframes sb-up { 50% { transform: translateY(-6px); opacity: .55; } }
+  @media (prefers-reduced-motion: reduce) { .up { animation: none; } }
+  .more { margin-top: 18px; max-width: 44em; }
+  .more summary { cursor: pointer; font-size: 14px; color: var(--dim); }
   .muted { color: var(--dim); font-size: 14px; }
+  .steps { padding-left: 1.3em; max-width: 40em; }
+  .steps li { margin: 4px 0; }
+  kbd { font: 12px ui-monospace, Consolas, monospace; padding: 1px 6px; border: 1px solid var(--hair); border-radius: 5px; background: var(--card); }
   a { color: inherit; }
   .folio { display: flex; justify-content: space-between; margin-top: 96px; padding-top: 18px; border-top: 1px solid var(--hair); }
   @media (max-width: 700px) {
@@ -72,10 +87,27 @@
   <p class="muted">손으로 하려면 <code>seasons.js</code> 를 내 페이지 옆에 두고 맨 아래에 한 줄. 배지 놓을 자리가 있으면 그 자리에 <code>&lt;span data-season-badges&gt;&lt;/span&gt;</code>.</p>
   <pre><code>&lt;script src="seasons.js" defer&gt;&lt;/script&gt;</code></pre>
 
-  <h2><span class="label">02</span>구글 같은 남의 페이지에 얹기</h2>
-  <p>아래 단추를 북마크바로 끌어다 놓으세요. 아무 페이지에서나 그 북마크를 누르면 왼쪽 아래에 배지가 뜹니다. 한 번 더 누르거나 × 로 닫습니다.</p>
-  <a class="bm" id="bm" href="#" title="북마크바로 끌어다 놓으세요">✳ 계절 배지</a>
-  <p class="muted">컴퓨터 브라우저(크롬 · 엣지 · 웨일)에서 됩니다. 그 페이지에만 잠깐 얹을 뿐, 그 사이트를 바꾸지 않아요. 새로 고치면 사라집니다.</p>
+  <h2><span class="label">02</span>네이버 · 구글 같은 남의 페이지에 얹기</h2>
+  <ol class="howto">
+    <li><span class="n">1</span><div>키보드에서 <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd> 를 누르세요. <span class="muted">(맥은 <kbd>⌘</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd>)</span><br><span class="muted">주소창 바로 아래에 북마크바(가는 줄)가 생겨요.</span></div></li>
+    <li><span class="n">2</span><div>아래 단추를 잡고, 위쪽 북마크바로 <b>끌어 올리세요.</b>
+      <div class="dragzone">
+        <a class="bm" id="bm" href="#" draggable="true"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M8 1.5v13" stroke="#f2a7c3"/><path d="M1.5 8h13" stroke="#f4c542"/><path d="M3.4 3.4l9.2 9.2" stroke="#dc6f2f"/><path d="M12.6 3.4l-9.2 9.2" stroke="#86b7e6"/></svg>4계절 배지</a>
+        <span class="up" aria-hidden="true">↑ 북마크바로</span>
+      </div>
+      <span class="muted" id="bmhint" role="status"></span></div></li>
+    <li><span class="n">3</span><div>네이버 · 구글 등 아무 사이트로 가서, 북마크바에 생긴 <b>「4계절 배지」</b> 를 누르세요.</div></li>
+    <li><span class="n">4</span><div>화면 위 가운데에 뜬 배지에서 <b>계절을 고르세요.</b><br><span class="muted">왼쪽 손잡이(⠿)를 잡고 끌면 자리를 옮기고, × 로 닫아요. 새로 고치면 사라져요.</span></div></li>
+  </ol>
+  <p class="muted">그 페이지에 잠깐 얹을 뿐 사이트를 바꾸지 않아요. 컴퓨터 브라우저(크롬 · 엣지 · 웨일)에서 됩니다.</p>
+  <details class="more">
+    <summary>북마크 대신 크롬 확장으로 (아이콘 한 번)</summary>
+    <ol class="muted steps">
+      <li><a href="https://github.com/patrol-jev/season-badges" rel="noopener">저장소</a>에서 ZIP 을 내려받아 풉니다.</li>
+      <li>주소창에 <code>chrome://extensions</code> → 오른쪽 위 <b>개발자 모드</b> 켜기 → <b>압축해제된 확장 프로그램을 로드합니다</b> → 푼 폴더 안의 <code>extension</code> 폴더.</li>
+      <li>오른쪽 위 퍼즐 조각 → 「계절 배지」 옆 핀. 이제 아무 페이지에서 ✳ 아이콘을 누르면 배지가 뜹니다.</li>
+    </ol>
+  </details>
 
   <h2><span class="label">03</span>link-cards 와 같이</h2>
   <p><a href="https://github.com/patrol-jev/link-cards" rel="noopener">link-cards</a>(링크를 카드로 모아 주는 한 장짜리 페이지)에는 머리에 배지 자리가 이미 있습니다. <code>seasons.js</code> 를 옆에 두면 켜지고, 지우면 배지만 사라집니다.</p>
@@ -91,7 +123,8 @@
   window.addEventListener("DOMContentLoaded", () => {
     const bm = document.getElementById("bm");
     if (window.SeasonBadges) bm.href = window.SeasonBadges.bookmarklet();
-    bm.addEventListener("click", (e) => { e.preventDefault(); bm.textContent = "← 누르지 말고 북마크바로 끌어다 놓으세요"; });
+    // 누르면 안내만 띄운다. 단추 글자는 그대로 둔다(끌어다 놓으면 이 글자가 북마크 이름이 된다).
+    bm.addEventListener("click", (e) => { e.preventDefault(); document.getElementById("bmhint").textContent = "누르지 말고, 잡은 채로 위쪽 북마크바까지 끌어 올리세요."; });
   });
 </script>
 </body>

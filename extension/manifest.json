@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "season-badges · 계절 배지",
+  "short_name": "계절 배지",
+  "version": "1.0.0",
+  "description": "아무 페이지에서 아이콘을 누르면 봄 · 여름 · 가을 · 겨울 배지가 뜹니다. 누르면 그 계절 날씨로 바뀝니다.",
+  "homepage_url": "https://github.com/patrol-jev/season-badges",
+  "author": "patrol_jev",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_title": "계절 배지 켜기 · 끄기",
+    "default_icon": { "16": "icon16.png", "32": "icon32.png", "48": "icon48.png" }
+  },
+  "background": { "service_worker": "background.js" },
+  "icons": { "16": "icon16.png", "32": "icon32.png", "48": "icon48.png", "128": "icon128.png" }
+}
